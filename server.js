@@ -84,24 +84,17 @@ const sections = [
     ]
   }
 ]
-var options = undefined;
+const options = commandLineArgs(optionDefinitions);
 
-try {
-  options = commandLineArgs(optionDefinitions);
-} catch (e) {
-  console.log(getUsage(sections));
-  console.log(e.message);
-  process.exit(-1);
-}
+const valid =
+  options.help ||
+  (
+    options.zookeeperhost
+  );
 
-if (!options.zookeeperhost) {
+if (!valid) {
   console.log(getUsage(sections));
   process.exit(-1);
-}
-
-if (options.help) {
-  console.log(getUsage(sections));
-  process.exit(0);
 }
 
 log.level = (options.verbose) ? 'verbose' : 'info';
