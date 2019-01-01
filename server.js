@@ -14,8 +14,6 @@ var express = require('express')
   , util = require('util')
 ;
 
-//Test github
-
 // Instantiate classes & servers
 const restURI      = '/kafka/send/:topic'
     , CONNECTED    = "CONNECTED"
