@@ -3,12 +3,14 @@
 // Module imports
 var express = require('express')
   , http = require('http')
+  , https = require('https')
   , bodyParser = require('body-parser')
   , kafka = require('kafka-node')
   , async = require('async')
   , _ = require('lodash')
   , QUEUE = require('block-queue')
   , log = require('npmlog-ts')
+  , cors = require('cors')
   , commandLineArgs = require('command-line-args')
   , getUsage = require('command-line-usage')
   , util = require('util')
@@ -20,8 +22,15 @@ const restURI      = '/kafka/send/:topic'
     , DISCONNECTED = "DISCONNECTED"
     , RESTPORT     = 10200
 ;
+
+const options = {
+  cert: fs.readFileSync("/u01/ssl/certificate.fullchain.crt").toString(),
+  key: fs.readFileSync("/u01/ssl/certificate.key").toString()
+};
+
 var restapp        = express()
-  , restserver     = http.createServer(restapp)
+//  , restserver     = http.createServer(restapp)
+  , restserver     = https.createServer(options, restapp)
   , Producer       = kafka.Producer
   , kafkaClient    = _.noop()
   , kafkaProducer  = _.noop()
@@ -102,6 +111,7 @@ log.level = (options.verbose) ? 'verbose' : 'info';
 // REST engine initial setup
 restapp.use(bodyParser.urlencoded({ extended: true }));
 restapp.use(bodyParser.json());
+restapp.use(cors());
 
 var servers = [];
 
