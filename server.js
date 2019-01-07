@@ -23,14 +23,14 @@ const restURI      = '/kafka/send/:topic'
     , RESTPORT     = 10200
 ;
 
-const options = {
+const sslOptions = {
   cert: fs.readFileSync("/u01/ssl/certificate.fullchain.crt").toString(),
   key: fs.readFileSync("/u01/ssl/certificate.key").toString()
 };
 
 var restapp        = express()
 //  , restserver     = http.createServer(restapp)
-  , restserver     = https.createServer(options, restapp)
+  , restserver     = https.createServer(sslOptions, restapp)
   , Producer       = kafka.Producer
   , kafkaClient    = _.noop()
   , kafkaProducer  = _.noop()
