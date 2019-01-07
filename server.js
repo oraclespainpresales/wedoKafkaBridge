@@ -144,7 +144,7 @@ function startKafka(cb) {
       log.info("", "[Kafka] Sending %d pending messages...", inboundQueue.length);
 
       async.reject(inboundQueue, (msg, callback) => {
-        kafkaProducer.send([{ topic: msg.topic, messages: JSON.stringify(msg.payload), partition: 0 }], (err, data) => {
+        kafkaProducer.send([{ topic: msg.topic.toLowerCase(), messages: JSON.stringify(msg.payload), partition: 0 }], (err, data) => {
           if (err) {
             log.error("", err);
             // Abort resending
