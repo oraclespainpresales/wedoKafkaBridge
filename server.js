@@ -201,10 +201,10 @@ async.series([
 
 restapp.post(restURI, function(req,res) {
   res.status(204).end();
-  log.verbose("","Incoming publish request to '%s' topic with payload: '%j'", req.params.topic, req.body);
+  log.verbose("","Incoming publish request to '%s' topic with payload: '%j'", req.params.topic.toLowerCase(), req.body);
 
   var message = {
-    topic: req.params.topic,
+    topic: req.params.topic.toLowerCase(),
     payload: req.body
   }
 
@@ -218,7 +218,7 @@ restapp.post(restURI, function(req,res) {
       startKafka();
     });
   } else {
-    kafkaProducer.send([{ topic: message.topic, messages: JSON.stringify(message.payload), partition: 0 }], (err, data) => {
+    kafkaProducer.send([{ topic: message.topic.toLowerCase(), messages: JSON.stringify(message.payload), partition: 0 }], (err, data) => {
       if (err) {
         log.error("", err);
         log.verbose("","[Kafka] Server not available. Enqueueing message");
