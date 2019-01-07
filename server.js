@@ -111,7 +111,7 @@ log.level = (options.verbose) ? 'verbose' : 'info';
 
 // REST engine initial setup
 restapp.use(bodyParser.urlencoded({ extended: true }));
-//restapp.use(bodyParser.json());
+restapp.use(bodyParser.json());
 restapp.use(cors());
 
 var servers = [];
@@ -201,7 +201,6 @@ async.series([
 
 restapp.post(restURI, function(req,res) {
   res.status(204).end();
-  console.log(req.body);
   log.verbose("","Incoming publish request to '%s' topic with payload: '%j'", req.params.topic.toLowerCase(), req.body);
 
   var message = {
